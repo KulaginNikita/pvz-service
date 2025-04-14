@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
-
 	domain "github.com/KulaginNikita/pvz-service/internal/domain/pvz"
 	pvzservice "github.com/KulaginNikita/pvz-service/internal/service/pvz"
 )
@@ -12,17 +11,14 @@ import (
 func (a *API) PostPvz(w http.ResponseWriter, r *http.Request) {
 	var req PVZ
 
-	// Декодируем JSON тело запроса
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "invalid JSON body", http.StatusBadRequest)
 		return
 	}
 
-	// Вызываем сервисный слой, используя ctx с ролью из middleware
 	pvz := domain.PVZ{City: domain.City(req.City)}
 
-	err := a.pvzService.CreatePVZ(r.Context(), &pvz)
-
+	created, err := a.pvzService.CreatePVZ(r.Context(), &pvz)
 	if err != nil {
 		switch {
 		case errors.Is(err, pvzservice.ErrForbiddenCity):
@@ -35,5 +31,13 @@ func (a *API) PostPvz(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	resp := PVZ{
+		Id:               &created.ID, 
+		City:             PVZCity(created.City),
+		RegistrationDate: &created.RegisteredAt,
+	}
+
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
+	_ = json.NewEncoder(w).Encode(resp)
 }

@@ -3,7 +3,6 @@ package api
 import (
 	"encoding/json"
 	"net/http"
-
 	"github.com/KulaginNikita/pvz-service/internal/domain/user"
 )
 

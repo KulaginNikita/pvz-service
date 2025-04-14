@@ -22,6 +22,7 @@ install-deps: install-goose install-oapi install-mockgen install-pgx install-squ
 LOCAL_MIGRATION_DIR = $(MIGRATION_DIR)
 LOCAL_MIGRATION_DSN = "host=localhost port=$(PG_PORT) dbname=$(PG_DATABASE_NAME) user=$(PG_USER) password=$(PG_PASSWORD) sslmode=disable"
 
+
 local-migration-status:
 	$(LOCAL_BIN)/goose -dir $(LOCAL_MIGRATION_DIR) postgres $(LOCAL_MIGRATION_DSN) status -v
 

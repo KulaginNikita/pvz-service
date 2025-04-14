@@ -11,24 +11,21 @@ import (
 )
 
 // Создание приемки товаров
-func (s *receptionService) CreateReception(ctx context.Context, rec *reception.Reception) error {
-	// Получаем роль из контекста
+func (s *receptionService) CreateReception(ctx context.Context, rec *reception.Reception) (*reception.Reception, error) {
 	role, ok := ctx.Value(middleware.RoleContextKey).(string)
 	if !ok {
-		return errors.New("missing role in context")
+		return nil, errors.New("missing role in context")
 	}
-
-	// Проверка роли
 	if role != "employee" {
-		return errors.New("user does not have 'employee' role")
+		return nil, errors.New("user does not have 'employee' role")
 	}
 
 	hasOpenReception, err := s.repo.HasOpenReception(ctx, converter.ToDBID(rec.PVZID))
 	if err != nil {
-		return err
+		return nil, err
 	}
 	if hasOpenReception {
-		return errors.New("there is already an open reception for this PVZ")
+		return nil, errors.New("there is already an open reception for this PVZ")
 	}
 
 	rec.Status = "in_progress"
@@ -37,11 +34,10 @@ func (s *receptionService) CreateReception(ctx context.Context, rec *reception.R
 		rec.ID = uuid.New()
 	}
 
-	// Создание новой приемки
 	err = s.repo.Create(ctx, converter.ToDB(rec))
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	return rec, nil
 }

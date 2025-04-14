@@ -6,6 +6,10 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
+type TokenManager interface {
+	GenerateToken(role string, duration time.Duration) (string, error)
+}
+
 type Claims struct {
 	Role string `json:"role"`
 	jwt.RegisteredClaims

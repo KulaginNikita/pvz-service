@@ -19,3 +19,10 @@ type PVZ struct {
 	City City
 	RegisteredAt time.Time
 }
+
+type PVZFilter struct {
+	StartDate time.Time
+	EndDate   time.Time
+	Offset    int64
+	Limit     int64
+}

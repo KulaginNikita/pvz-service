@@ -12,16 +12,14 @@ import (
 )
 
 
-func (s *pvzService) CreatePVZ(ctx context.Context, pvz *pvz.PVZ) error {
-	// Получаем роль из контекста
+func (s *pvzService) CreatePVZ(ctx context.Context, pvz *pvz.PVZ) (*pvz.PVZ, error) {
 	role, ok := ctx.Value(middleware.RoleContextKey).(string)
 	if !ok {
-		return errors.New("missing role in context")
+		return nil, errors.New("missing role in context")
 	}
 
-	// Проверка роли
 	if role != "moderator" {
-		return errors.New("user does not have 'moderator' role")
+		return nil, errors.New("user does not have 'moderator' role")
 	}
 
 	if pvz.ID == uuid.Nil {
@@ -32,16 +30,15 @@ func (s *pvzService) CreatePVZ(ctx context.Context, pvz *pvz.PVZ) error {
 		pvz.RegisteredAt = time.Now()
 	}
 
-	// Проверка на допустимый город
 	if pvz.City != "Москва" && pvz.City != "Санкт-Петербург" && pvz.City != "Казань" {
-		return errors.New("PVZ can only be created in Москва, Санкт-Петербург, or Казань")
+		return nil, errors.New("PVZ can only be created in Москва, Санкт-Петербург, or Казань")
 	}
 
-	// Вызов репозитория
 	err := s.repo.CreatePVZ(ctx, converter.ToDB(pvz))
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	return pvz, nil
 }
+
