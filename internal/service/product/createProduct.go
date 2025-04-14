@@ -12,7 +12,6 @@ import (
 )
 
 func (s *productService) CreateProduct(ctx context.Context, p *product.Product) error {
-	// Получаем роль из контекста
 	role, ok := ctx.Value(middleware.RoleContextKey).(string)
 	if !ok {
 		return errors.New("missing role in context")

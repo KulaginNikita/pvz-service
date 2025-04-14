@@ -46,11 +46,9 @@ func main() {
 	}
 	defer pool.Close()
 
-	// JWT и логгер
-	jwtManager := jwtutil.NewManager("my-secret-key") // Лучше взять из ENV
+	jwtManager := jwtutil.NewManager("my-secret-key") 
 	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
 
-	// Слои
 	userRepo := userrepo.NewUserRepository(pool)
 	pvzRepo := pvzrepo.NewPVZRepository(pool)
 	receptionRepo := receptionrepo.NewReceptionRepository(pool)
@@ -63,7 +61,6 @@ func main() {
 
 	ap := api.NewAPI(userService, pvzService, receptionService, productService, jwtManager)
 
-	// Обёртка
 	wrapper := api.ServerInterfaceWrapper{
 		Handler: ap,
 		ErrorHandlerFunc: func(w http.ResponseWriter, r *http.Request, err error) {
@@ -71,20 +68,16 @@ func main() {
 		},
 	}
 
-	// --- Роутер
 	r := chi.NewRouter()
 
-	// Логгирование применяется ко всем ручкам
 	r.Use(middleware.LoggerMiddleware(logger))
 
-	// Публичные ручки
 	r.Group(func(r chi.Router) {
 		r.Post("/login", wrapper.PostLogin)
 		r.Post("/register", wrapper.PostRegister)
 		r.Post("/dummyLogin", wrapper.PostDummyLogin)
 	})
 
-	// Защищённые ручки
 	r.Group(func(r chi.Router) {
 		r.Use(middleware.JWTAuthMiddleware(jwtManager))
 		r.Post("/products", wrapper.PostProducts)
@@ -95,7 +88,6 @@ func main() {
 		r.Post("/receptions", wrapper.PostReceptions)
 	})
 
-	// --- Запуск
 	log.Println("🚀 Server started at http://localhost:8080")
 	if err := http.ListenAndServe(":8080", r); err != nil {
 		log.Fatalf("failed to start server: %v", err)

@@ -19,7 +19,7 @@ func Test_FullFlow_CreateAndCloseReception(t *testing.T) {
 	moderatorToken := getToken(t, "moderator")
 	employeeToken := getToken(t, "employee")
 
-	// 1. Создание ПВЗ
+
 	var pvzID uuid.UUID
 	t.Run("create_pvz", func(t *testing.T) {
 		body := map[string]any{
@@ -35,8 +35,7 @@ func Test_FullFlow_CreateAndCloseReception(t *testing.T) {
 		pvzID, _ = uuid.Parse(result.Id)
 	})
 
-	// 2. Создание приёмки
-	
+
 	t.Run("create_reception", func(t *testing.T) {
 		body := map[string]any{
 			"pvzId": pvzID,
@@ -51,7 +50,6 @@ func Test_FullFlow_CreateAndCloseReception(t *testing.T) {
 		_,_ = uuid.Parse(result.Id)
 	})
 
-	// 3. Добавление 50 товаров
 	t.Run("add_50_products", func(t *testing.T) {
 		for i := 0; i < 50; i++ {
 			body := map[string]any{
@@ -63,7 +61,6 @@ func Test_FullFlow_CreateAndCloseReception(t *testing.T) {
 		}
 	})
 
-	// 4. Закрытие приёмки
 	t.Run("close_reception", func(t *testing.T) {
 		url := fmt.Sprintf("%s/pvz/%s/close_last_reception", baseURL, pvzID.String())
 		resp := post(t, client, url, nil, http.StatusOK, employeeToken)

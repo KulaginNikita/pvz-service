@@ -4,7 +4,6 @@ RUN apk update && \
     apk add bash curl && \
     rm -rf /var/cache/apk/*
 
-# Скачиваем goose
 ADD https://github.com/pressly/goose/releases/download/v3.14.0/goose_linux_x86_64 /bin/goose
 RUN chmod +x /bin/goose
 
