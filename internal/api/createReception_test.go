@@ -44,7 +44,7 @@ func TestPostReceptions(t *testing.T) {
 				expect: true,
 			},
 			expectedStatus: http.StatusCreated,
-			expectedBody:   "", // можно валидировать отдельно
+			expectedBody:   "", 
 		},
 		{
 			name:           "невалидный JSON",

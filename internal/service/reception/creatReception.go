@@ -10,7 +10,6 @@ import (
 	"github.com/google/uuid"
 )
 
-// Создание приемки товаров
 func (s *receptionService) CreateReception(ctx context.Context, rec *reception.Reception) (*reception.Reception, error) {
 	role, ok := ctx.Value(middleware.RoleContextKey).(string)
 	if !ok {

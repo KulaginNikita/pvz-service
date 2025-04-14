@@ -9,7 +9,7 @@ import (
 )
 
 func (s *pvzService) GetPVZ(ctx context.Context, params *pvz.PVZFilter) ([]pvz.PVZ, error) {
-	// 1. Авторизация
+
 	role, ok := ctx.Value(middleware.RoleContextKey).(string)
 	if !ok {
 		return nil, errors.New("missing role in context")
@@ -18,7 +18,6 @@ func (s *pvzService) GetPVZ(ctx context.Context, params *pvz.PVZFilter) ([]pvz.P
 		return nil, errors.New("access denied: only moderator or employee allowed")
 	}
 
-	// 2. Валидация дат
 	if params.StartDate.IsZero() || params.EndDate.IsZero() {
 		return nil, errors.New("startDate and endDate must be set")
 	}
@@ -26,6 +25,5 @@ func (s *pvzService) GetPVZ(ctx context.Context, params *pvz.PVZFilter) ([]pvz.P
 		params.Limit = 10
 	}
 
-	// 3. Вызов репозитория
 	return s.repo.GetPVZ(ctx, params)
 }

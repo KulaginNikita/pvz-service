@@ -5,6 +5,16 @@ LOCAL_BIN := $(CURDIR)/bin
 install-goose:
 	GOBIN=$(LOCAL_BIN) go install github.com/pressly/goose/v3/cmd/goose@v3.14.0
 
+
+install-grpc-deps:
+	GOBIN=$(LOCAL_BIN) go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28.1
+	GOBIN=$(LOCAL_BIN) go install -mod=mod google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2
+
+get-grpc-deps:
+	go get -u google.golang.org/protobuf/cmd/protoc-gen-go
+	go get -u google.golang.org/grpc/cmd/protoc-gen-go-grpc
+
+
 install-oapi:
 	GOBIN=$(LOCAL_BIN) go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest
 
@@ -41,3 +51,14 @@ generate-api:
 	@echo "⚙️  Generating API from $(OPENAPI_FILE)..."
 	@mkdir -p $(OAPI_OUT_DIR)
 	$(LOCAL_BIN)/oapi-codegen -generate types,chi-server -package $(OAPI_PACKAGE) -o $(OAPI_OUTPUT) $(OPENAPI_FILE)
+
+
+
+generate-pvz-api:
+	mkdir -p pkg/pvz_v1
+	PATH=$(LOCAL_BIN):$$PATH \
+	protoc --proto_path=proto \
+	--go_out=pkg/pvz_v1 --go_opt=paths=source_relative \
+	--go-grpc_out=pkg/pvz_v1 --go-grpc_opt=paths=source_relative \
+	proto/pvz/pvz.proto
+

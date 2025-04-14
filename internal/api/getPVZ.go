@@ -8,7 +8,6 @@ import (
 )
 
 func (a *API) GetPvz(w http.ResponseWriter, r *http.Request, params GetPvzParams) {
-	// Валидация даты
 	if params.StartDate == nil || params.EndDate == nil {
 		http.Error(w, "startDate and endDate are required", http.StatusBadRequest)
 		return
@@ -26,7 +25,6 @@ func (a *API) GetPvz(w http.ResponseWriter, r *http.Request, params GetPvzParams
 
 	offset := int64((page - 1)) * limit
 
-	// Сформировать фильтр
 	filter := &pvz.PVZFilter{
 		StartDate: *params.StartDate,
 		EndDate:   *params.EndDate,

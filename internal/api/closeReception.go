@@ -2,7 +2,6 @@ package api
 
 import (
 	"net/http"
-
 	"github.com/google/uuid"
 	openapi_types "github.com/oapi-codegen/runtime/types"
 )
@@ -17,6 +16,5 @@ func (a *API) PostPvzPvzIdCloseLastReception(w http.ResponseWriter, r *http.Requ
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	// Возвращаем успешный ответ
 	w.Write([]byte(`{"message": "Reception closed successfully"}`))
 }

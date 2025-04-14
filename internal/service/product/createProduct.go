@@ -12,11 +12,11 @@ import (
 )
 
 func (s *productService) CreateProduct(ctx context.Context, p *product.Product) error {
+
 	role, ok := ctx.Value(middleware.RoleContextKey).(string)
 	if !ok {
 		return errors.New("missing role in context")
 	}
-
 	if role != "employee" {
 		return errors.New("user does not have 'employee' role")
 	}

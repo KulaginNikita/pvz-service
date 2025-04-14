@@ -45,7 +45,7 @@ func TestGetPvz(t *testing.T) {
 				expect: true,
 			},
 			expectedStatus: http.StatusOK,
-			expectedBody:   "", // валидируем отдельно
+			expectedBody:   "", 
 		},
 		{
 			name: "отсутствует дата",

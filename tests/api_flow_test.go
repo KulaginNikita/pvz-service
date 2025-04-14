@@ -53,7 +53,7 @@ func Test_FullFlow_CreateAndCloseReception(t *testing.T) {
 	t.Run("add_50_products", func(t *testing.T) {
 		for i := 0; i < 50; i++ {
 			body := map[string]any{
-				"pvzId": pvzID, // ✅ корректный pvzId
+				"pvzId": pvzID, 
 				"type":  "одежда",
 			}
 			resp := post(t, client, baseURL+"/products", body, http.StatusCreated, employeeToken)

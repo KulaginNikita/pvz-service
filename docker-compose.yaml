@@ -22,13 +22,23 @@ services:
     env_file:
       - .env
 
-  migrator:
+  pvz-grpc:
     build:
+      context: .
+      dockerfile: Dockerfile.grpc
+    ports:
+      - "${GRPC_PORT}:3000"
+    depends_on:
+      - db
+    env_file:
+      - .env
+
+  migrator:
+    build: 
       context: .
       dockerfile: migration.Dockerfile
     restart: on-failure
     environment:
       DB_HOST: pg
-
 volumes:
   db_data:

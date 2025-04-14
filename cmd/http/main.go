@@ -38,11 +38,10 @@ func buildDSN() string {
 }
 
 func main() {
-	// Подключение к БД
 	dsn := buildDSN()
 	pool, err := pgxpool.New(context.Background(), dsn)
 	if err != nil {
-		log.Fatalf("не удалось подключиться к БД: %v", err)
+		log.Fatalf("couldn't connect to db: %v", err)
 	}
 	defer pool.Close()
 

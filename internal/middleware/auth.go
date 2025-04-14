@@ -35,7 +35,6 @@ func JWTAuthMiddleware(jwtManager *jwtutil.Manager) func(http.Handler) http.Hand
 				return
 			}
 
-			// Передаём роль в контекст
 			ctx := context.WithValue(r.Context(), RoleContextKey, claims.Role)
 			next.ServeHTTP(w, r.WithContext(ctx))
 		})

@@ -8,7 +8,6 @@ import (
 )
 
 func (s *userService) Register(ctx context.Context, u *user.User) error {
-	// TODO: hash password before saving (optional now)
 	return s.repo.Create(ctx, converter.ToDB(u))
 }
 

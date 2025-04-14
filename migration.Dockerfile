@@ -16,5 +16,4 @@ COPY migrations ./migrations/
 RUN apk add dos2unix && dos2unix migration.sh
 
 RUN chmod +x migration.sh
-
 ENTRYPOINT ["bash", "migration.sh"] 
